@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-// READ all recipes
+// GET all recipes
 router.get('/', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM recipes');
@@ -12,11 +12,10 @@ router.get('/', async (req, res) => {
   }
 });
 
-// CREATE new recipe
+// POST new recipe
 router.post('/', async (req, res) => {
   const { en, hi } = req.body;
   if (!en || !hi) return res.status(400).json({ error: 'Both English and Hindi required' });
-
   try {
     await db.query('INSERT INTO recipes (en, hi) VALUES (?, ?)', [en, hi]);
     res.json({ message: 'Recipe added successfully' });
@@ -25,7 +24,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// UPDATE a recipe
+// PUT update recipe
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { en, hi } = req.body;
@@ -38,7 +37,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE a recipe
+// DELETE recipe
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
